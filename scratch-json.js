@@ -145,7 +145,7 @@ class ScratchJson {
 
   _parseJsonPath(path) {
     path = path.match(/(\\.|[^\.])+/g);
-    path.forEach((string,index,array) => {array[index] = string.replace(/\\(?!\\)/g, "");});
+    path.forEach((string,index,array) => {array[index] = string.replace(/\\(?=\.)/g, "").replace(/\\\\/g, "\\");});
     let path_temp = [];
     path.forEach((string) => {
       if(/(?:\[[0-9]+\])+$/g.test(string)) {

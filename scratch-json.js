@@ -122,7 +122,7 @@ class ScratchJson {
     for(let i = 0; i < path.length - 1; i++) {
       _object = _object[path[i]];
     }
-    delete _object[path[path.length - 1]];
+    try {delete _object[path[path.length - 1]];} catch {}
     return JSON.stringify(object);
   }
 

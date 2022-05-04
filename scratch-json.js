@@ -103,8 +103,8 @@ class ScratchJson {
     value = value == "" ? value : isNaN(value) ? this._isJsonString(value) ? JSON.parse(value) : value : Number(value);
     let _object = object;
     for(let i = 0; i < path.length; i++) {
-      let _object_temp = Array.isArray(_object) ? _object[path[i]] : Object.keys(_object).includes(path[i]) ? _object[path[i]] : _object;
-      if(_object_temp == _object || typeof(_object_temp) === "undefined" || (!(i == path.length - 1) && (!(typeof(_object_temp) === "object") || (typeof(_object_temp) === "object" && Array.isArray(_object_temp) && (!(typeof(path[i + 1]) === "number" || Object.keys(_object_temp).includes(path[i + 1])) || typeof(_object_temp[path[i + 1]]) === "undefined")))) || i == path.length - 1) {
+      let _object_path_i = Array.isArray(_object) ? _object[path[i]] : Object.keys(_object).includes(path[i]) ? _object[path[i]] : _object;
+      if(_object_path_i == _object || typeof(_object_path_i) === "undefined" || (!(i == path.length - 1) && (!(typeof(_object_path_i) === "object") || (typeof(_object_path_i) === "object" && Array.isArray(_object_path_i) && (!(typeof(path[i + 1]) === "number" || Object.keys(_object_path_i).includes(path[i + 1])) || typeof(_object_path_i[path[i + 1]]) === "undefined")))) || i == path.length - 1) {
         for(let j = path.length - 1; j > i; j--) {
           let temp = typeof(path[j]) === "number" ? [] : {};
           temp[path[j]] = value;
@@ -112,7 +112,7 @@ class ScratchJson {
         }
         _object[path[i]] = value;
         break;
-      } else {_object = _object_temp;}
+      } else {_object = _object_path_i;}
     }
     return JSON.stringify(object);
   }
@@ -150,16 +150,16 @@ class ScratchJson {
   _parseJsonPath(path) {
     path = path.match(/(\\.|[^\.])+/g);
     path.forEach((string,index,array) => {array[index] = string.replace(/\\(?=\.)/g, "").replace(/\\\\/g, "\\");});
-    let path_temp = [];
+    let _path = [];
     path.forEach((string) => {
       if(/(?:\[[0-9]+\])+$/g.test(string)) {
-        if(!(string.replace(/(?:\[[0-9]+\])+$/g, "") == "")) {path_temp[path_temp.length] = string.replace(/(?:\[[0-9]+\])+$/g, "");}
+        if(!(string.replace(/(?:\[[0-9]+\])+$/g, "") == "")) {_path[_path.length] = string.replace(/(?:\[[0-9]+\])+$/g, "");}
         string.match(/(?:\[[0-9]+\])+$/g)[0].match(/\[([0-9]+)\]/g).forEach((string) => {
-          path_temp[path_temp.length] = Number(string.replace(/\[([0-9]+)\]/g, "$1"));
+          _path[_path.length] = Number(string.replace(/\[([0-9]+)\]/g, "$1"));
         });
-      } else {path_temp[path_temp.length] = string;}
+      } else {_path[_path.length] = string;}
     });
-    path = path_temp;
+    path = _path;
     return path
   }
 }

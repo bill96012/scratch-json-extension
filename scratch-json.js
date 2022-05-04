@@ -86,7 +86,7 @@ class ScratchJson {
   }
 
   get({path, object}) {
-    path = this._parseJsonPath(path);
+    if(path == "") {return ""} else {path = parseJsonPath(path);}
     try {
       let result = path.reduce((obj, key) => obj[key], JSON.parse(object));
       return typeof(result) === "undefined" ? "" : typeof(result) === "object" ? JSON.stringify(result) : result
@@ -94,9 +94,9 @@ class ScratchJson {
   }
 
   set({path, object, value}) {
-    path = this._parseJsonPath(path);
-    object = JSON.parse(object);
-    value = isNaN(value) ? this._isJsonString(value) ? JSON.parse(value) : value : Number(value);
+    if(path == "") {return ""} else {path = parseJsonPath(path);}
+    if(object == "" || !(this._isJsonString(object))) {return ""} else {object = JSON.parse(object);}
+    value = value == "" ? value : isNaN(value) ? this._isJsonString(value) ? JSON.parse(value) : value : Number(value);
     let _object = object;
     for(let i = 0; i < path.length; i++) {
       let _object_temp = Array.isArray(_object) ? _object[path[i]] : Object.keys(_object).includes(path[i]) ? _object[path[i]] : _object;
@@ -114,20 +114,20 @@ class ScratchJson {
   }
 
   delete({path, object}) {
-    path = this._parseJsonPath(path);
-    object = JSON.parse(object);
+    if(path == "") {return ""} else {path = parseJsonPath(path);}
+    if(object == "" || !(this._isJsonString(object))) {return ""} else {object = JSON.parse(object);}
     try {
-    let _object = object;
-    for(let i = 0; i < path.length - 1; i++) {
-      _object = _object[path[i]];
-    }
-    delete _object[path[path.length - 1]];
-  } catch {}
+      let _object = object;
+      for(let i = 0; i < path.length - 1; i++) {
+        _object = _object[path[i]];
+      }
+      delete _object[path[path.length - 1]];
+    } catch {}
     return JSON.stringify(object);
   }
 
   has({path, object}) {
-    path = this._parseJsonPath(path);
+    if(path == "") {return ""} else {path = parseJsonPath(path);}
     try {
       let result = path.reduce((obj, key) => obj[key], JSON.parse(object));
       return typeof(result) === "undefined" ? false : true

@@ -3,20 +3,20 @@
  `https://bill96012.github.io/scratch-json-extension/scratch-json.js`  
   
  Try it:  
- <https://turbowarp.org/editor?extension=https://bill96012.github.io/scratch-json-extension/scratch-json.js/>
+ <https://turbowarp.org/editor?extension=https://bill96012.github.io/scratch-json-extension/scratch-json.js>
 
 ## Notes
 
 ### Data Path
 
- `.` - separate all the keys
+ `.` - Separate all the keys
 
  ```text
  a.b
  x.y.z
  ```
 
- `\` - escape the '`.`' and '`\`' after it  
+ `\` - Escape the '`.`' and '`\`' after it  
  *Don't forget to use the boolean block "( ) is valid JSON?" to check the escaped key.*
 
 ```text
@@ -25,7 +25,7 @@ x\.y\.z  ->  'x.y.z'
 i\\\..j  ->  'i\.', 'j'
 ```
 
- `[n]` - index of the array, '`n`' must be an integer
+ `[n]` - Index of the array, '`n`' must be an integer
 
 ```text
 a[0]

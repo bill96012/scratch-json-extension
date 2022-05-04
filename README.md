@@ -9,23 +9,23 @@
 
 ### Data Path
 
- `.` - Separate all the keys
+ `.` - Separate all the sub keys
 
  ```text
  a.b
  x.y.z
  ```
 
- `\` - Escape the '`.`' and '`\`' after it  
+ `\` - Escape the `.` and `\` after it  
  *Don't forget to use the boolean block "( ) is valid JSON?" to check the escaped key.*
 
 ```text
-a\.b     ->  'a.b'
-x\.y\.z  ->  'x.y.z'
+a.b      ->  'a',   'b'
+x\.y.z   ->  'x.y', 'z'
 i\\\..j  ->  'i\.', 'j'
 ```
 
- `[n]` - Index of the array, '`n`' must be an integer
+ `[n]` - Index of the array, `n` must be an integer
 
 ```text
 a[0]

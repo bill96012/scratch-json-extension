@@ -100,15 +100,13 @@ class ScratchJson {
     let _object = object;
     for(let i = 0; i < path.length; i++) {
       let _object_temp = Array.isArray(_object) ? _object[path[i]] : Object.keys(_object).includes(path[i]) ? _object[path[i]] : _object;
-      if(_object_temp == _object || typeof(_object_temp) === "undefined" || (!(i == path.length - 1) && (!(typeof(_object_temp) === "object") || (typeof(_object_temp) === "object" && Array.isArray(_object_temp) && !(Object.keys(_object_temp).includes(path[i + 1]))))) || i == path.length - 1) {
+      if(_object_temp == _object || typeof(_object_temp) === "undefined" || (!(i == path.length - 1) && (!(typeof(_object_temp) === "object") || (typeof(_object_temp) === "object" && Array.isArray(_object_temp) && (!(typeof(path[i + 1]) === "number" || Object.keys(_object_temp).includes(path[i + 1])) || typeof(_object_temp[path[i + 1]]) === "undefined")))) || i == path.length - 1) {
         for(let j = path.length - 1; j > i; j--) {
           let temp = typeof(path[j]) === "number" ? [] : {};
           temp[path[j]] = value;
           value = temp;
         }
-        let temp;
-        temp = _object;
-        temp[path[i]] = value;
+        _object[path[i]] = value;
         break;
       } else {_object = _object_temp;}
     }

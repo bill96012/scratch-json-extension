@@ -116,11 +116,13 @@ class ScratchJson {
   delete({path, object}) {
     path = this._parseJsonPath(path);
     object = JSON.parse(object);
+    try {
     let _object = object;
     for(let i = 0; i < path.length - 1; i++) {
       _object = _object[path[i]];
     }
-    try {delete _object[path[path.length - 1]];} catch {}
+    delete _object[path[path.length - 1]];
+  } catch {}
     return JSON.stringify(object);
   }
 

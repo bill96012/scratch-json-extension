@@ -86,7 +86,7 @@ class ScratchJson {
   }
 
   get({path, object}) {
-    if(path == "") {return ""} else {path = parseJsonPath(path);}
+    if(path == "") {return ""} else {path = this._parseJsonPath(path);}
     try {
       let result = path.reduce((obj, key) => obj[key], JSON.parse(object));
       return typeof(result) === "undefined" ? "" : typeof(result) === "object" ? JSON.stringify(result) : result
@@ -94,7 +94,7 @@ class ScratchJson {
   }
 
   set({path, object, value}) {
-    if(path == "") {return ""} else {path = parseJsonPath(path);}
+    if(path == "") {return ""} else {path = this._parseJsonPath(path);}
     if(object == "" || !(this._isJsonString(object))) {return ""} else {object = JSON.parse(object);}
     value = value == "" ? value : isNaN(value) ? this._isJsonString(value) ? JSON.parse(value) : value : Number(value);
     let _object = object;
@@ -114,7 +114,7 @@ class ScratchJson {
   }
 
   delete({path, object}) {
-    if(path == "") {return ""} else {path = parseJsonPath(path);}
+    if(path == "") {return ""} else {path = this._parseJsonPath(path);}
     if(object == "" || !(this._isJsonString(object))) {return ""} else {object = JSON.parse(object);}
     try {
       let _object = object;
@@ -127,7 +127,7 @@ class ScratchJson {
   }
 
   has({path, object}) {
-    if(path == "") {return ""} else {path = parseJsonPath(path);}
+    if(path == "") {return ""} else {path = this._parseJsonPath(path);}
     try {
       let result = path.reduce((obj, key) => obj[key], JSON.parse(object));
       return typeof(result) === "undefined" ? false : true

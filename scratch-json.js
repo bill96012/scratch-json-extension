@@ -77,9 +77,9 @@ class ScratchJson {
         {
           opcode: 'valid',
           blockType: Scratch.BlockType.BOOLEAN,
-          text: '[STRING] is valid JSON?',
+          text: '[INPUT] is valid JSON?',
           arguments: {
-            STRING: {
+            INPUT: {
               type: Scratch.ArgumentType.STRING,
               defaultValue: '{"x": {"y": [3, 6, 9]}}'
             }
@@ -146,8 +146,8 @@ class ScratchJson {
     }
   }
 
-  valid({STRING}) {
-    return this._isJsonString(STRING)
+  valid({INPUT}) {
+    return this._isJsonString(INPUT)
   }
 
 

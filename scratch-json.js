@@ -77,9 +77,9 @@ class ScratchJson {
         {
           opcode: 'valid',
           blockType: Scratch.BlockType.BOOLEAN,
-          text: '[string] is valid JSON?',
+          text: '[STRING] is valid JSON?',
           arguments: {
-            string: {
+            STRING: {
               type: Scratch.ArgumentType.STRING,
               defaultValue: '{"x": {"y": [3, 6, 9]}}'
             }
@@ -90,9 +90,10 @@ class ScratchJson {
   }
 
   get({PATH, OBJECT}) {
-    if(PATH == '') {return '';} else {PATH = this._parseJsonPath(PATH);}
+    if(PATH === '') {return '';} else {PATH = this._parseJsonPath(PATH);}
+    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {return '';} else {OBJECT = JSON.parse(OBJECT);}
     try {
-      let result = PATH.reduce((obj, key) => obj[key], JSON.parse(OBJECT));
+      let result = PATH.reduce((obj, key) => obj[key], OBJECT);
       return typeof(result) === 'undefined' ? '' : typeof(result) === OBJECT ? JSON.stringify(result) : result;
     } catch {
       return '';
@@ -100,8 +101,8 @@ class ScratchJson {
   }
 
   set({PATH, OBJECT, VALUE}) {
-    if(PATH == '') {return '';} else {PATH = this._parseJsonPath(PATH);}
-    if(OBJECT == '' || !(this._isJsonString(OBJECT))) {return '';} else {OBJECT = JSON.parse(OBJECT);}
+    if(PATH === '') {return '';} else {PATH = this._parseJsonPath(PATH);}
+    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {return '';} else {OBJECT = JSON.parse(OBJECT);}
     VALUE = VALUE == '' ? VALUE : isNaN(VALUE) ? this._isJsonString(VALUE) ? JSON.parse(VALUE) : VALUE : Number(VALUE);
     let _object = OBJECT;
     for(let i = 0; i < PATH.length; i++) {
@@ -122,8 +123,8 @@ class ScratchJson {
   }
 
   delete({PATH, OBJECT}) {
-    if(PATH == '') {return '';} else {PATH = this._parseJsonPath(PATH);}
-    if(OBJECT == '' || !(this._isJsonString(OBJECT))) {return '';} else {OBJECT = JSON.parse(OBJECT);}
+    if(PATH === '') {return '';} else {PATH = this._parseJsonPath(PATH);}
+    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {return '';} else {OBJECT = JSON.parse(OBJECT);}
     try {
       let _object = OBJECT;
       for(let i = 0; i < PATH.length - 1; i++) {
@@ -135,17 +136,18 @@ class ScratchJson {
   }
 
   has({PATH, OBJECT}) {
-    if(PATH == '') {return '';} else {PATH = this._parseJsonPath(PATH);}
+    if(PATH === '') {return '';} else {PATH = this._parseJsonPath(PATH);}
+    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {return '';} else {OBJECT = JSON.parse(OBJECT);}
     try {
-      let result = PATH.reduce((obj, key) => obj[key], JSON.parse(OBJECT));
+      let result = PATH.reduce((obj, key) => obj[key], OBJECT);
       return typeof(result) === 'undefined' ? false : true;
     } catch {
       return false;
     }
   }
 
-  valid({string}) {
-    return this._isJsonString(string)
+  valid({STRING}) {
+    return this._isJsonString(STRING)
   }
 
 
@@ -158,22 +160,27 @@ class ScratchJson {
     }
   }
 
-  _parseJsonPath(PATH) {
-    PATH = PATH.match(/(\\.|[^\.])+/g);
-    PATH.forEach((string,index,array) => {array[index] = string.replace(/\\(?=\.)/g, '').replace(/\\\\/g, '\\');});
+  _parseJsonPath(path) {
+    if(typeof(path) === "number") {
+      path = String(path);
+    }
+    path = path.match(/(\\.|[^\.])+/g);
+    path.forEach((string,index,array) => {
+      array[index] = string.replace(/\\(?=\.)/g, '').replace(/\\\\/g, '\\');
+    });
     let _path = [];
-    PATH.forEach((string) => {
+    path.forEach((string) => {
       if(/(?:\[[0-9]+\])+$/g.test(string)) {
         if(!(string.replace(/(?:\[[0-9]+\])+$/g, '') == '')) {_path[_path.length] = string.replace(/(?:\[[0-9]+\])+$/g, '');}
         string.match(/(?:\[[0-9]+\])+$/g)[0].match(/\[([0-9]+)\]/g).forEach((string) => {
-          _path[_path.length] = Number(string.replace(/\[([0-9]+)\]/g, '$1'));
+          _path[_path.length] = string.replace(/\[([0-9]+)\]/g, '$1');
         });
       } else {
         _path[_path.length] = string;
       }
     });
-    PATH = _path;
-    return PATH;
+    path = _path;
+    return path;
   }
 }
 

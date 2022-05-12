@@ -90,24 +90,32 @@ class ScratchJson {
   }
 
   get({PATH, OBJECT}) {
-    if(PATH === '') {return '';} else {PATH = this._parseJsonPath(PATH);}
-    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {return '';} else {OBJECT = JSON.parse(OBJECT);}
+    if(PATH === '' || OBJECT === '' || !(this._isJsonString(OBJECT))) {
+      return '';
+    } else {
+      PATH = this._parseJsonPath(PATH);
+      OBJECT = JSON.parse(OBJECT);
+    }
     try {
       let result = PATH.reduce((obj, key) => obj[key], OBJECT);
-      return typeof(result) === 'undefined' ? '' : typeof(result) === OBJECT ? JSON.stringify(result) : result;
+      return typeof(result) === 'undefined' ? '' : typeof(result) === 'object' ? JSON.stringify(result) : result;
     } catch {
       return '';
     }
   }
 
   set({PATH, OBJECT, VALUE}) {
-    if(PATH === '') {return '';} else {PATH = this._parseJsonPath(PATH);}
-    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {return '';} else {OBJECT = JSON.parse(OBJECT);}
-    VALUE = VALUE == '' ? VALUE : isNaN(VALUE) ? this._isJsonString(VALUE) ? JSON.parse(VALUE) : VALUE : Number(VALUE);
+    if(PATH === '' || OBJECT === '' || !(this._isJsonString(OBJECT))) {
+      return '';
+    } else {
+      PATH = this._parseJsonPath(PATH);
+      OBJECT = JSON.parse(OBJECT);
+    }
+    VALUE = VALUE === '' ? VALUE : isNaN(VALUE) ? this._isJsonString(VALUE) ? JSON.parse(VALUE) : VALUE : Number(VALUE);
     let _object = OBJECT;
     for(let i = 0; i < PATH.length; i++) {
       let _object_path_i = Array.isArray(_object) ? _object[PATH[i]] : Object.keys(_object).includes(PATH[i]) ? _object[PATH[i]] : _object;
-      if(_object_path_i == _object || typeof(_object_path_i) === 'undefined' || (!(i == PATH.length - 1) && (!(typeof(_object_path_i) === OBJECT) || (typeof(_object_path_i) === OBJECT && Array.isArray(_object_path_i) && (!(typeof(PATH[i + 1]) === 'number' || Object.keys(_object_path_i).includes(PATH[i + 1])) || typeof(_object_path_i[PATH[i + 1]]) === 'undefined')))) || i == PATH.length - 1) {
+      if(_object_path_i == _object || typeof(_object_path_i) === 'undefined' || (!(i == PATH.length - 1) && (!(typeof(_object_path_i) === 'object') || (typeof(_object_path_i) === 'object' && Array.isArray(_object_path_i) && (!(typeof(PATH[i + 1]) === 'number' || Object.keys(_object_path_i).includes(PATH[i + 1])) || typeof(_object_path_i[PATH[i + 1]]) === 'undefined')))) || i == PATH.length - 1) {
         for(let j = PATH.length - 1; j > i; j--) {
           let temp = typeof(PATH[j]) === 'number' ? [] : {};
           temp[PATH[j]] = VALUE;
@@ -123,8 +131,12 @@ class ScratchJson {
   }
 
   delete({PATH, OBJECT}) {
-    if(PATH === '') {return '';} else {PATH = this._parseJsonPath(PATH);}
-    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {return '';} else {OBJECT = JSON.parse(OBJECT);}
+    if(PATH === '' || OBJECT === '' || !(this._isJsonString(OBJECT))) {
+      return '';
+    } else {
+      PATH = this._parseJsonPath(PATH);
+      OBJECT = JSON.parse(OBJECT);
+    }
     try {
       let _object = OBJECT;
       for(let i = 0; i < PATH.length - 1; i++) {
@@ -136,8 +148,12 @@ class ScratchJson {
   }
 
   has({PATH, OBJECT}) {
-    if(PATH === '') {return '';} else {PATH = this._parseJsonPath(PATH);}
-    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {return '';} else {OBJECT = JSON.parse(OBJECT);}
+    if(PATH === '' || OBJECT === '' || !(this._isJsonString(OBJECT))) {
+      return '';
+    } else {
+      PATH = this._parseJsonPath(PATH);
+      OBJECT = JSON.parse(OBJECT);
+    }
     try {
       let result = PATH.reduce((obj, key) => obj[key], OBJECT);
       return typeof(result) === 'undefined' ? false : true;
@@ -147,7 +163,7 @@ class ScratchJson {
   }
 
   valid({INPUT}) {
-    return this._isJsonString(INPUT)
+    return this._isJsonString(INPUT);
   }
 
 
@@ -171,9 +187,9 @@ class ScratchJson {
     let _path = [];
     path.forEach((string) => {
       if(/(?:\[[0-9]+\])+$/g.test(string)) {
-        if(!(string.replace(/(?:\[[0-9]+\])+$/g, '') == '')) {_path[_path.length] = string.replace(/(?:\[[0-9]+\])+$/g, '');}
+        if(!(string.replace(/(?:\[[0-9]+\])+$/g, '') == '')) _path[_path.length] = string.replace(/(?:\[[0-9]+\])+$/g, '');
         string.match(/(?:\[[0-9]+\])+$/g)[0].match(/\[([0-9]+)\]/g).forEach((string) => {
-          _path[_path.length] = string.replace(/\[([0-9]+)\]/g, '$1');
+          _path[_path.length] = Number(string.replace(/\[([0-9]+)\]/g, '$1'));
         });
       } else {
         _path[_path.length] = string;

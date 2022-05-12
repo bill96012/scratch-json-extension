@@ -111,7 +111,7 @@ class ScratchJson {
       PATH = this._parseJsonPath(PATH);
       OBJECT = JSON.parse(OBJECT);
     }
-    VALUE = VALUE === '' ? VALUE : isNaN(VALUE) ? this._isJsonString(VALUE) ? JSON.parse(VALUE) : VALUE : Number(VALUE);
+    VALUE = (VALUE === '' || VALUE === true || VALUE === false) ? VALUE : isNaN(VALUE) ? this._isJsonString(VALUE) ? JSON.parse(VALUE) : VALUE : Number(VALUE);
     let _object = OBJECT;
     for(let i = 0; i < PATH.length; i++) {
       let _object_path_i = Array.isArray(_object) ? _object[PATH[i]] : Object.keys(_object).includes(PATH[i]) ? _object[PATH[i]] : _object;

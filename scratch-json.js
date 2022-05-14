@@ -64,7 +64,7 @@ class ScratchJson {
         {
           opcode: 'has',
           blockType: Scratch.BlockType.BOOLEAN,
-          text: '[OBJECT] contains [PATH] ?',
+          text: '[OBJECT] has [PATH] ?',
           arguments: {
             PATH: {
               type: Scratch.ArgumentType.STRING,

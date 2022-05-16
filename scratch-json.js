@@ -61,6 +61,23 @@ class ScratchJson {
             }
           }
         },
+        '---',
+        {
+          opcode: 'lengthOfArray',
+          blockType: Scratch.BlockType.REPORTER,
+          text: 'length of array [PATH] from [OBJECT]',
+          arguments: {
+            PATH: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'x.y'
+            },
+            OBJECT: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: '{"x": {"y": [3, 6, 9]}}'
+            }
+          }
+        },
+        '---',
         {
           opcode: 'has',
           blockType: Scratch.BlockType.BOOLEAN,
@@ -147,6 +164,17 @@ class ScratchJson {
       delete _object[PATH[PATH.length - 1]];
     } catch {}
     return JSON.stringify(OBJECT);
+  }
+
+  lengthOfArray({PATH, OBJECT}) {
+    let array = this.get({PATH: PATH, OBJECT: OBJECT});
+    if(array === '') {
+      return 0;
+    } else {
+      array = JSON.parse(array);
+      if(!(Array.isArray(array))) return 0;
+      return array.length;
+    }
   }
 
   has({PATH, OBJECT}) {

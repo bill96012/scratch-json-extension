@@ -109,8 +109,10 @@ class ScratchJson {
   }
 
   get({PATH, OBJECT}) {
-    if(PATH === '' || OBJECT === '' || !(this._isJsonString(OBJECT))) {
+    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {
       return '';
+    } else if(PATH === '') {
+      return OBJECT;
     } else {
       PATH = this._parseJsonPath(PATH);
       OBJECT = JSON.parse(OBJECT);
@@ -124,8 +126,10 @@ class ScratchJson {
   }
 
   set({PATH, OBJECT, VALUE}) {
-    if(PATH === '' || OBJECT === '' || !(this._isJsonString(OBJECT))) {
+    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {
       return '';
+    } else if(PATH === '') {
+      return OBJECT;
     } else {
       PATH = this._parseJsonPath(PATH);
       OBJECT = JSON.parse(OBJECT);
@@ -150,8 +154,10 @@ class ScratchJson {
   }
 
   delete({PATH, OBJECT}) {
-    if(PATH === '' || OBJECT === '' || !(this._isJsonString(OBJECT))) {
+    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {
       return '';
+    } else if(PATH === '') {
+      return OBJECT;
     } else {
       PATH = this._parseJsonPath(PATH);
       OBJECT = JSON.parse(OBJECT);
@@ -178,13 +184,9 @@ class ScratchJson {
   }
 
   has({PATH, OBJECT}) {
-    if(PATH === '' || OBJECT === '' || !(this._isJsonString(OBJECT))) {
-      return '';
-    } else {
-      PATH = this._parseJsonPath(PATH);
-      OBJECT = JSON.parse(OBJECT);
-    }
+    PATH = PATH === '' ? '' : this._parseJsonPath(PATH);
     try {
+      OBJECT = JSON.parse(OBJECT);
       let result = PATH.reduce((obj, key) => obj[key], OBJECT);
       return typeof(result) === 'undefined' ? false : true;
     } catch {

@@ -185,6 +185,7 @@ class ScratchJson {
 
   has({PATH, OBJECT}) {
     PATH = PATH === '' ? '' : this._parseJsonPath(PATH);
+    if(PATH.length == 0) return false;
     try {
       OBJECT = JSON.parse(OBJECT);
       let result = PATH.reduce((obj, key) => obj[key], OBJECT);
@@ -213,6 +214,7 @@ class ScratchJson {
       path = String(path);
     }
     path = path.match(/(\\.|[^\.])+/g);
+    if(path === null) return [];
     path.forEach((string,index,array) => {
       array[index] = string.replace(/\\(?=\.)/g, '').replace(/\\\\/g, '\\');
     });

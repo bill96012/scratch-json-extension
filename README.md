@@ -19,7 +19,8 @@
     This means every custom extension block will act like an empty "wait () seconds" block but do not affected by turbo mode or custom block (run without screen refresh).
 
  2. The stability of this extension
-    > Due to any possible bugs and various uncertainties, I can not promise there will not have any breaking changes affecting the projects, so I created a "version" folder in this repository to store every version of the extension.
+
+    Due to any possible bugs and various uncertainties, I can not promise there will not have any breaking changes affecting the projects, so I created a "version" folder in this repository to store every version of the extension.
 
     Use the file in the "version" folder for a project instead:  
     `https://bill96012.github.io/scratch-json-extension/version/(version).js`

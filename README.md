@@ -12,6 +12,7 @@
  Here are something you should know before using this extension in a project.
 
  1. The technical limitations of custom extension
+
     > Due to technical limitations of the sandbox, every call to a custom extension will stop the current script for a full frame, regardless of turbo mode or run without screen refresh.
 
     (extracted from [TurboWarp Documentation](https://docs.turbowarp.org/development/custom-extensions))
@@ -44,6 +45,7 @@
 
 ### Length of array (PATH) from (JSON)
 
+ *(added from v1.1.0)*  
  Reporter block.  
  Returns the length of the array (PATH) in (JSON), return "0" if (PATH) is not an array.
 

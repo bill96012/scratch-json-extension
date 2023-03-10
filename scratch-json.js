@@ -201,6 +201,7 @@ class ScratchJson {
 
 
   _isJsonString(string) {
+    if(typeof(string) != "string" || !/(^\[.*\]$)|(^\{.*\}$)/g.test(string)) return false;
     try {
       JSON.parse(string);
       return true;

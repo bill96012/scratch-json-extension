@@ -210,27 +210,26 @@ class ScratchJson {
   }
 
   _parseJsonPath(path) {
-    if(typeof(path) === "number") {
-      path = String(path);
-    }
+    if(typeof(path) != "string") path = String(path);
     path = path.match(/(\\.|[^\.])+/g);
-    if(path === null) return [];
-    path.forEach((string,index,array) => {
-      array[index] = string.replace(/\\(?=\.)/g, '').replace(/\\\\/g, '\\');
+    if(!Array.isArray(path)) return [];
+    path.forEach((element,index,array) => {
+      array[index] = element.replace(/\\(?=\.)/g, '').replace(/\\\\/g, '\\');
     });
-    let _path = [];
-    path.forEach((string) => {
-      if(/(?:\[[0-9]+\])+$/g.test(string)) {
-        if(!(string.replace(/(?:\[[0-9]+\])+$/g, '') == '')) _path[_path.length] = string.replace(/(?:\[[0-9]+\])+$/g, '');
-        string.match(/(?:\[[0-9]+\])+$/g)[0].match(/\[([0-9]+)\]/g).forEach((string) => {
-          _path[_path.length] = Number(string.replace(/\[([0-9]+)\]/g, '$1'));
+    return Array.from(path, (element, index) => {
+      if(/(?:\[[0-9]+\])+$/g.test(element)) {
+        let result = [];
+        let _array_name = element.replace(/(?:\[[0-9]+\])+$/g, '');
+        if(_array_name != '') result.push(_array_name);
+        element.match(/(?:\[[0-9]+\])+$/g)[0].match(/\[([0-9]+)\]/g).forEach((element) => {
+          result.push(Number(element.replace(/\[([0-9]+)\]/g, '$1')));
         });
+        for(let i = 1; i < result.length; i++) path.splice(index + i, 0, result[i]);
+        return result[0];
       } else {
-        _path[_path.length] = string;
+        return element;
       }
     });
-    path = _path;
-    return path;
   }
 }
 

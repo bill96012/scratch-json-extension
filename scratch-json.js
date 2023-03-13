@@ -103,6 +103,37 @@ class ScratchJson {
               defaultValue: '{"x": {"y": [3, 6, 9]}}'
             }
           }
+        },
+        '---',
+        {
+          opcode: 'createDotPath',
+          blockType: Scratch.BlockType.REPORTER,
+          text: '[INPUT1].[INPUT2]',
+          arguments: {
+            INPUT1: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'x'
+            },
+            INPUT2: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'y'
+            }
+          }
+        },
+        {
+          opcode: 'createArrayPath',
+          blockType: Scratch.BlockType.REPORTER,
+          text: ['[INPUT]', '[', '[INDEX]', ']'],
+          arguments: {
+            INPUT: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'x'
+            },
+            INDEX: {
+              type: Scratch.ArgumentType.NUMBER,
+              defaultValue: 0
+            }
+          }
         }
       ]
     };
@@ -199,6 +230,14 @@ class ScratchJson {
     return this._isJsonString(INPUT);
   }
 
+  createDotPath({INPUT1, INPUT2}) {
+    return `${INPUT1}${INPUT1 !== '' && INPUT2 !== '' ? '.' : ''}${INPUT2}`;
+  }
+
+  createArrayPath({INPUT, INDEX}) {
+    if(isNaN(INDEX) || INDEX < 0) INDEX = 0;
+    return `${INPUT}[${Math.floor(INDEX)}]`;
+  }
 
   _isJsonString(string) {
     if(typeof(string) != 'string' || !/(^\[.*\]$)|(^\{.*\}$)/g.test(string)) return false;

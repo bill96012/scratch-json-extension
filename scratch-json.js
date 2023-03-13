@@ -201,7 +201,7 @@ class ScratchJson {
 
 
   _isJsonString(string) {
-    if(typeof(string) != "string" || !/(^\[.*\]$)|(^\{.*\}$)/g.test(string)) return false;
+    if(typeof(string) != 'string' || !/(^\[.*\]$)|(^\{.*\}$)/g.test(string)) return false;
     try {
       JSON.parse(string);
       return true;
@@ -211,7 +211,7 @@ class ScratchJson {
   }
 
   _parseJsonPath(path) {
-    if(typeof(path) != "string") path = String(path);
+    if(typeof(path) != 'string') path = String(path);
     path = path.match(/(\\.|[^\.])+/g);
     if(!Array.isArray(path)) return [];
     path.forEach((element,index,array) => {

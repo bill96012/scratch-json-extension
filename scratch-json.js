@@ -138,9 +138,9 @@ class ScratchJson {
     let _object = OBJECT;
     for(let i = 0; i < PATH.length; i++) {
       let _object_path_i = Array.isArray(_object) ? _object[PATH[i]] : Object.keys(_object).includes(PATH[i]) ? _object[PATH[i]] : _object;
-      if(_object_path_i == _object || typeof(_object_path_i) === 'undefined' || _object_path_i === null || i == PATH.length - 1 || (!(i == PATH.length - 1) && (!(typeof(_object_path_i) === 'object') || (typeof(_object_path_i) === 'object' && ((Array.isArray(_object_path_i) && !(typeof(PATH[i + 1]) === 'number') && !(typeof(PATH[i + 1]) === 'number') && (!(isNaN(PATH[i + 1])) || !(Object.keys(_object_path_i).includes(PATH[i + 1])))) || (!(Array.isArray(_object_path_i)) && typeof(PATH[i + 1]) === 'number')))))) {
+      if(_object_path_i == _object || typeof(_object_path_i) == 'undefined' || _object_path_i === null || i == PATH.length - 1 || (i != PATH.length - 1 && (typeof(_object_path_i) != 'object' || (typeof(_object_path_i) == 'object' && ((Array.isArray(_object_path_i) && typeof(PATH[i + 1]) != 'number' && !(Object.keys(_object_path_i).includes(PATH[i + 1]))) || (!(Array.isArray(_object_path_i)) && typeof(PATH[i + 1]) == 'number')))))) {
         for(let j = PATH.length - 1; j > i; j--) {
-          let temp = typeof(PATH[j]) === 'number' ? [] : {};
+          let temp = typeof(PATH[j]) == 'number' ? [] : {};
           temp[PATH[j]] = VALUE;
           VALUE = temp;
         }

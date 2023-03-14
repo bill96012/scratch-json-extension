@@ -63,6 +63,63 @@ class ScratchJson {
         },
         '---',
         {
+          opcode: 'insertValueAtIndexOfArray',
+          blockType: Scratch.BlockType.REPORTER,
+          text: 'insert [VALUE] at [INDEX] of array [PATH] from [OBJECT]',
+          arguments: {
+            VALUE: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'z'
+            },
+            INDEX: {
+              type: Scratch.ArgumentType.NUMBER,
+              defaultValue: 1
+            },
+            PATH: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'x.y'
+            },
+            OBJECT: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: '{"x": {"y": [3, 6, 9]}}'
+            }
+          }
+        },
+        {
+          opcode: 'deleteIndexOfArray',
+          blockType: Scratch.BlockType.REPORTER,
+          text: 'delete [INDEX] of array [PATH] from [OBJECT]',
+          arguments: {
+            INDEX: {
+              type: Scratch.ArgumentType.NUMBER,
+              defaultValue: 1
+            },
+            PATH: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'x.y'
+            },
+            OBJECT: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: '{"x": {"y": [3, 6, 9]}}'
+            }
+          }
+        },
+        {
+          opcode: 'deleteAllOfArray',
+          blockType: Scratch.BlockType.REPORTER,
+          text: 'delete all of array [PATH] from [OBJECT]',
+          arguments: {
+            PATH: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'x.y'
+            },
+            OBJECT: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: '{"x": {"y": [3, 6, 9]}}'
+            }
+          }
+        },
+        {
           opcode: 'lengthOfArray',
           blockType: Scratch.BlockType.REPORTER,
           text: 'length of array [PATH] from [OBJECT]',
@@ -216,6 +273,41 @@ class ScratchJson {
       delete _object[PATH[PATH.length - 1]];
     } catch {}
     return JSON.stringify(OBJECT);
+  }
+
+  insertValueAtIndexOfArray({VALUE ,INDEX, PATH, OBJECT}) {
+    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {
+      return '';
+    } else if(isNaN(INDEX) || Number(INDEX) - 1 < 0) {
+      return OBJECT;
+    }
+    INDEX = Math.floor(INDEX) - 1;
+    let array = this.get({PATH: PATH, OBJECT: OBJECT});
+    if(array === '') return OBJECT;
+    array = JSON.parse(array);
+    array.splice(INDEX, 0, VALUE);
+    return PATH === '' ? JSON.stringify(array) : this.set({PATH: PATH, OBJECT: OBJECT, VALUE: JSON.stringify(array)});
+  }
+
+  deleteIndexOfArray({INDEX, PATH, OBJECT}) {
+    if(OBJECT === '' || !(this._isJsonString(OBJECT))) {
+      return '';
+    } else if(isNaN(INDEX) || Number(INDEX) - 1 < 0) {
+      return OBJECT;
+    }
+    INDEX = Math.floor(INDEX) - 1;
+    let array = this.get({PATH: PATH, OBJECT: OBJECT});
+    if(array === '') return OBJECT;
+    array = JSON.parse(array);
+    if(!(INDEX < array.length)) return OBJECT;
+    array.splice(INDEX, 1);
+    return PATH === '' ? JSON.stringify(array) : this.set({PATH: PATH, OBJECT: OBJECT, VALUE: JSON.stringify(array)});
+  }
+
+  deleteAllOfArray({PATH, OBJECT}) {
+    if(OBJECT === '' || !(this._isJsonString(OBJECT))) return '';
+    if(!this.isArray({PATH: PATH, OBJECT: OBJECT})) return OBJECT;
+    return PATH === '' ? '[]' : this.set({PATH: PATH, OBJECT: OBJECT, VALUE: '[]'});
   }
 
   lengthOfArray({PATH, OBJECT}) {

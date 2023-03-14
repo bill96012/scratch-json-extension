@@ -94,6 +94,21 @@ class ScratchJson {
           }
         },
         {
+          opcode: 'isArray',
+          blockType: Scratch.BlockType.BOOLEAN,
+          text: '[PATH] from [OBJECT] is array?',
+          arguments: {
+            PATH: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'x.y'
+            },
+            OBJECT: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: '{"x": {"y": [3, 6, 9]}}'
+            }
+          }
+        },
+        {
           opcode: 'valid',
           blockType: Scratch.BlockType.BOOLEAN,
           text: '[INPUT] is valid JSON?',
@@ -221,6 +236,18 @@ class ScratchJson {
       OBJECT = JSON.parse(OBJECT);
       let result = PATH.reduce((obj, key) => obj[key], OBJECT);
       return typeof(result) === 'undefined' ? false : true;
+    } catch {
+      return false;
+    }
+  }
+
+  isArray({PATH, OBJECT}) {
+    PATH = PATH === '' ? '' : this._parseJsonPath(PATH);
+    try {
+      OBJECT = JSON.parse(OBJECT);
+      if(PATH.length == 0) return Array.isArray(OBJECT);
+      let result = PATH.reduce((obj, key) => obj[key], OBJECT);
+      return typeof(result) == 'undefined' || !Array.isArray(result) ? false : true;
     } catch {
       return false;
     }

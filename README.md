@@ -7,24 +7,12 @@
  `https://bill96012.github.io/scratch-json-extension/scratch-json.js`  
  <https://turbowarp.org/editor?extension=https://bill96012.github.io/scratch-json-extension/scratch-json.js>
 
-## IMPORTANT
+## Version
 
- Here are something you should know before using this extension in a project.
-
- 1. The technical limitations of custom extension
-
-    > Due to technical limitations of the sandbox, every call to a custom extension will stop the current script for a full frame, regardless of turbo mode or run without screen refresh.
-
-    (extracted from [TurboWarp Documentation](https://docs.turbowarp.org/development/custom-extensions))
-
-    This means every custom extension block will act like an empty "wait () seconds" block but do not affected by turbo mode or custom block (run without screen refresh).
-
- 2. The stability of this extension
-
-    Due to any possible bugs and various uncertainties, I can not promise there will not have any breaking changes affecting the projects, so I created a "version" folder in this repository to store every version of the extension.
-
-    Use the file in the "version" folder for a project instead:  
-    `https://bill96012.github.io/scratch-json-extension/version/(version).js`
+ Due to any possible bugs and various uncertainties, there can be any breaking changes in this extension.  
+ To protect projects from breaking changes, use the file in the "version" folder for the project instead.  
+ Every file in the folder is named by using Semantic Versioning 2.0.0.  
+`https://bill96012.github.io/scratch-json-extension/version/(version).js`
 
 ## Blocks
 
@@ -43,7 +31,27 @@
  Reporter block.  
  Returns the (JSON) which value of (PATH) has removed.
 
-### Length of array (PATH) from (JSON)
+### Insert (VALUE) at (INDEX) of Array (PATH) from (JSON)
+
+ *(added from v1.2.0)*  
+ Reporter block.  
+ Returns the (JSON) which (VALUE) has inserted at (INDEX) of (PATH).  
+ Note that the (INDEX) is started from `1`, not `0`.
+
+### Delete (INDEX) of Array (PATH) from (JSON)
+
+ *(added from v1.2.0)*  
+ Reporter block.  
+ Similar to the "Delete (PATH) from (JSON)" block but only for array and removes (INDEX) completely.  
+ Note that the (INDEX) is started from `1`, not `0`.
+
+### Delete all of Array (PATH) from (JSON)
+
+ *(added from v1.2.0)*  
+ Reporter block.  
+ Similar to the "Delete (INDEX) of Array (PATH) from (JSON)" block but removes all items instead.  
+
+### Length of Array (PATH) from (JSON)
 
  *(added from v1.1.0)*  
  Reporter block.  
@@ -52,43 +60,68 @@
 ### (JSON) has (PATH) ?
 
  Boolean block.  
- Returns "true" if (JSON) has (PATH), else "false".
+ Returns "true" if (JSON) has (PATH), else "false".  
+ Note that the block is only for checking (PATH) exists, not for keyword searching.
 
-### (INPUT) is valid JSON?
+### (PATH) from (JSON) is Array?
+
+ *(added from v1.2.0)*  
+ Boolean block.  
+ Returns "true" if (PATH) in (JSON) is array, else "false".  
+
+### (INPUT) is Valid JSON?
 
  Boolean block.  
  Returns "true" if (INPUT) is valid JSON, else "false".
 
-## Notes
+### (INPUT1) . (INPUT2)
 
-### Path
+ *(added from v1.2.0)*  
+ Reporter block.  
+ Returns "(INPUT1)`.`(INPUT2)", if one of the inputs is empty returns without the ".".
 
- `.` - Separate all the sub keys
+### (INPUT) [ (INDEX) ]
+
+ *(added from v1.2.0)*  
+ Reporter block.  
+ Returns "(INPUT)`[`(INDEX)`]`", (INDEX) will filled up with "0" if empty or invalid.
+
+## Path
+
+ The "path" can let you reach the data without stacking blocks.  
+ *There are still some blocks that help stack building the path tho.*
 
  ```text
- a.b
- x.y.z
+ a    -> {"a":(...)}
+ a.b  -> {"a":{"b":(...)}}
+ a[1] -> {"a":[(...),"x",(...)]}
+ ```
+
+ `.` - Connects a key after it as a child key that is before it
+
+ ```text
+ x.y   -> {"x":{"y":(...)}}
+ i.j.k -> {"i":{"j":{"k":(...)}}}
  ```
 
  `\` - Escape the `.` and `\` after it  
  *Don't forget to use the boolean block "( ) is valid JSON?" to check the escaped key.*
 
-```text
-a.b      ->  'a',   'b'
-x\.y.z   ->  'x.y', 'z'
-i\\\..j  ->  'i\.', 'j'
-```
+ ```text
+ x\.y.z  >> 'x.y'.'z' -> {"x.y":{"z":(...)}}
+ i\\\..j >> 'i\.'.'j' -> {"i\.":{"j":(...)}}
+ ```
 
- `[n]` - Index of the array, `n` must be an integer
+ `[n]` - Points to an item in the array, `n` is a zero-based index and must be an integer
 
-```text
-a[0]
-x[1][3][5]
-```
+ ```text
+ x[1]    -> {"x":[(...),"a",(...)]}
+ i[0][2] -> {"i":[[(...),(...),"a",(...)],(...)]}
+ ```
 
- It is possible to create a complex path
+ Combining the methods above, it is possible to create a complex path
 
-```text
-a.b[0]
-x[9].y[0][3].z
-```
+ ```text
+ a.b[0]
+ x[9].y[6][0][1].z
+ ```
